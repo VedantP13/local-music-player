@@ -31,8 +31,8 @@
         }
 
         html, body {
-            height: 100%;
-            overflow: hidden; /* Prevents scrollbars from the animated background */
+            min-height: 100%; /* Allow body to grow vertically */
+            overflow-x: hidden; /* Prevent horizontal scroll from blobs */
         }
 
         body {
@@ -408,19 +408,50 @@
         #playlist::-webkit-scrollbar-thumb:hover {
             background-color: rgba(255, 255, 255, 0.4); /* More visible on hover */
         }
-
+        
+        /* NEW: Styles for playlist items with album art */
         .playlist-item {
-            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px;
             margin-bottom: 8px;
             border-radius: 8px;
             cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1); /* Animate all properties */
+            transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform: scale(1);
+        }
+
+        .playlist-item-art {
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+            border-radius: 6px;
+            background-color: rgba(0,0,0,0.2);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .playlist-item-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .playlist-item-art svg {
+            width: 20px;
+            height: 20px;
+            color: var(--secondary-text);
+        }
+
+        .playlist-item-info {
             font-size: 0.9rem;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            transform: scale(1); /* Base state for transform animation */
-            text-shadow: 0 1px 4px rgba(0,0,0,0.5); /* Improved text visibility */
+            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
         }
 
         .playlist-item:hover {
@@ -432,13 +463,16 @@
                 radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.15), transparent 80%), /* Soft top sheen */
                 rgba(255, 255, 255, 0.2); /* Slightly brighter base */
             color: var(--primary-text); /* Ensure text is bright */
-            font-weight: 500;
             transform: scale(1.03); /* Lift effect */
             box-shadow: 
                 inset 0 1px 1px rgba(255, 255, 255, 0.2), /* Gel edge */
                 inset 0 -1px 1px rgba(0, 0, 0, 0.1), /* Gel edge */
                 0 6px 12px rgba(0,0,0,0.25); /* Enhanced lift shadow */
             border: 1px solid rgba(255, 255, 255, 0.15); /* Add a subtle border to match buttons */
+        }
+        
+        .playlist-item.active .playlist-item-info {
+            font-weight: 500;
         }
         
         /* --- Folder Selection --- */
@@ -535,16 +569,21 @@
 
         /* --- Responsive Design --- */
         @media (max-width: 800px) {
+            html, body {
+                overflow-y: auto; /* Allow vertical scrolling on mobile */
+            }
             body {
-                padding: 1rem; /* Reduced padding for smaller screens */
+                padding: 2rem 1rem; /* Adjust padding for top/bottom and sides */
+                align-items: flex-start; /* Align player to the top, preventing cutoff */
             }
 
             .music-player {
                 grid-template-columns: 1fr;
                 grid-template-rows: auto 1fr;
                 max-width: 420px; /* Slightly increased max-width for modern phones */
-                height: 95vh;
-                max-height: 800px; /* Increased max-height */
+                height: auto; /* Let height be determined by content */
+                min-height: 90vh; /* Ensure it still feels substantial */
+                max-height: none; /* Remove max-height to allow scrolling */
                 gap: 15px; /* Reduced gap between panels */
             }
             .glass-panel {
@@ -724,7 +763,7 @@
             changeFolderBtn.addEventListener('click', () => folderInput.click());
             folderInput.addEventListener('change', handleFolderSelection);
 
-            function handleFolderSelection(event) {
+            async function handleFolderSelection(event) {
                 const files = Array.from(event.target.files);
                 const audioFiles = files.filter(file => /\.(mp3|wav|ogg|flac|m4a)$/i.test(file.name));
 
@@ -733,14 +772,51 @@
                     return;
                 }
 
-                playlist = audioFiles.map(file => ({
-                    name: file.name.replace(/\.[^/.]+$/, ""), // Remove file extension
-                    url: URL.createObjectURL(file),
-                    fileObject: file // Store the original file for metadata reading
-                }));
-
+                // Show a loading state
+                playlistView.innerHTML = `<li class="playlist-item" style="justify-content: center;">Loading music...</li>`;
                 folderSelectorView.style.display = 'none';
                 playlistView.style.display = 'block';
+
+                // Helper to read tags for a single file and return a promise
+                const readTags = (file) => new Promise((resolve) => {
+                    const trackInfo = {
+                        name: file.name.replace(/\.[^/.]+$/, ""),
+                        url: URL.createObjectURL(file),
+                        fileObject: file,
+                        title: file.name.replace(/\.[^/.]+$/, ""),
+                        artist: "Unknown Artist",
+                        albumArtUrl: null
+                    };
+
+                    window.jsmediatags.read(file, {
+                        onSuccess: (tag) => {
+                            const { artist, title, picture } = tag.tags;
+                            trackInfo.title = title || trackInfo.name;
+                            trackInfo.artist = artist || "Unknown Artist";
+                            if (picture) {
+                                // FIX: A more robust way to handle large image data that avoids "Maximum call stack size exceeded" error.
+                                // The old method (String.fromCharCode.apply) fails on large arrays.
+                                let binary = '';
+                                const bytes = picture.data;
+                                const len = bytes.length;
+                                for (let i = 0; i < len; i++) {
+                                    binary += String.fromCharCode(bytes[i]);
+                                }
+                                const base64String = btoa(binary);
+                                trackInfo.albumArtUrl = `data:${picture.format};base64,${base64String}`;
+                            }
+                            resolve(trackInfo);
+                        },
+                        onError: (error) => {
+                            console.log(`Could not read metadata for ${file.name}:`, error.type, error.info);
+                            resolve(trackInfo); // Resolve with default info on error
+                        }
+                    });
+                });
+
+                // Use Promise.all to wait for all metadata to be read
+                playlist = await Promise.all(audioFiles.map(file => readTags(file)));
+
                 renderPlaylist();
                 loadTrack(0);
             }
@@ -750,10 +826,29 @@
                 playlist.forEach((track, index) => {
                     const li = document.createElement('li');
                     li.className = 'playlist-item';
-                    li.textContent = track.name;
                     li.dataset.index = index;
+
+                    const artContainer = document.createElement('div');
+                    artContainer.className = 'playlist-item-art';
+
+                    if (track.albumArtUrl) {
+                        const img = document.createElement('img');
+                        img.className = 'playlist-item-img';
+                        img.src = track.albumArtUrl;
+                        artContainer.appendChild(img);
+                    } else {
+                        artContainer.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`;
+                    }
+
+                    const infoContainer = document.createElement('div');
+                    infoContainer.className = 'playlist-item-info';
+                    infoContainer.textContent = track.title;
+
+                    li.appendChild(artContainer);
+                    li.appendChild(infoContainer);
+                    
                     li.addEventListener('click', () => {
-                        currentIndex = index; // Update index before loading
+                        currentIndex = index;
                         loadTrack(currentIndex);
                         playTrack();
                     });
@@ -766,44 +861,32 @@
             function loadTrack(index, isPlaying = false) {
                 if (index < 0 || index >= playlist.length) return;
                 
-                // NEW: Smooth transition logic
                 albumArtContainer.classList.add('fade-out');
                 trackInfo.classList.add('fade-out');
 
                 setTimeout(() => {
                     const track = playlist[index];
                     audio.src = track.url;
+                    
+                    // Use pre-loaded metadata
+                    trackTitle.textContent = track.title;
+                    trackArtist.textContent = track.artist;
 
-                    // Reset view first
-                    albumArtImg.src = '';
-                    albumArtImg.style.display = 'none';
-                    albumArtPlaceholder.style.display = 'flex';
-                    trackTitle.textContent = track.name;
-                    trackArtist.textContent = 'Local File';
+                    if (track.albumArtUrl) {
+                        albumArtImg.src = track.albumArtUrl;
+                        albumArtImg.style.display = 'block';
+                        albumArtPlaceholder.style.display = 'none';
+                    } else {
+                        albumArtImg.src = '';
+                        albumArtImg.style.display = 'none';
+                        albumArtPlaceholder.style.display = 'flex';
+                    }
 
-                    window.jsmediatags.read(track.fileObject, {
-                        onSuccess: function(tag) {
-                            const { artist, title, picture } = tag.tags;
-                            trackTitle.textContent = title ? title : track.name;
-                            trackArtist.textContent = artist ? artist : 'Local File';
-                            if (picture) {
-                                const base64String = btoa(String.fromCharCode.apply(null, picture.data));
-                                albumArtImg.src = `data:${picture.format};base64,${base64String}`;
-                                albumArtImg.style.display = 'block';
-                                albumArtPlaceholder.style.display = 'none';
-                            }
-                        },
-                        onError: function(error) {
-                            console.log('Could not read metadata:', error.type, error.info);
-                        }
-                    });
-
-                    const colors = generateColorsFromText(track.name);
+                    const colors = generateColorsFromText(track.title);
                     document.querySelector('.blob:nth-child(1)').style.background = colors[0];
                     document.querySelector('.blob:nth-child(2)').style.background = colors[1];
                     document.querySelector('.blob:nth-child(3)').style.background = colors[2];
                     
-                    // Fade in new content
                     albumArtContainer.classList.remove('fade-out');
                     trackInfo.classList.remove('fade-out');
                     
@@ -811,7 +894,7 @@
                         playTrack();
                     }
 
-                }, 250); // half of transition duration
+                }, 250);
 
                 updateActiveTrackHighlight();
             }
@@ -845,14 +928,11 @@
             }
             
             function handleTrackEnd() {
-                // Repeat one song
                 if (repeatState === 2) {
                     audio.currentTime = 0;
                     playTrack();
-                // No repeat, and it's the last song
                 } else if (repeatState === 0 && currentIndex === playlist.length - 1 && !isShuffled) {
                     pauseTrack();
-                // Otherwise (repeat all, or not the last song), go to next
                 } else {
                     nextTrack();
                 }
@@ -903,12 +983,12 @@
                 repeatIconAll.style.display = 'none';
                 repeatIconOne.style.display = 'none';
 
-                if (repeatState === 0) { // No repeat
+                if (repeatState === 0) {
                     repeatIconAll.style.display = 'block';
-                } else if (repeatState === 1) { // Repeat all
+                } else if (repeatState === 1) {
                     repeatBtn.classList.add('active');
                     repeatIconAll.style.display = 'block';
-                } else { // Repeat one
+                } else {
                     repeatBtn.classList.add('active');
                     repeatIconOne.style.display = 'block';
                 }
@@ -921,7 +1001,11 @@
                 const activeItem = document.querySelector(`.playlist-item[data-index='${currentIndex}']`);
                 if (activeItem) {
                     activeItem.classList.add('active');
-                    activeItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    // On mobile, the user might want to stay focused on the player controls.
+                    // We'll only scroll the playlist into view on desktop screens.
+                    if (window.matchMedia("(min-width: 801px)").matches) {
+                        activeItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
                 }
             }
 
@@ -931,14 +1015,14 @@
             nextBtn.addEventListener('click', nextTrack);
             prevBtn.addEventListener('click', prevTrack);
             shuffleBtn.addEventListener('click', toggleShuffle);
-            repeatBtn.addEventListener('click', toggleRepeat); // New
+            repeatBtn.addEventListener('click', toggleRepeat);
 
             audio.addEventListener('timeupdate', updateProgressBar);
             audio.addEventListener('loadedmetadata', () => {
                 progressBar.max = audio.duration;
                 totalDurationEl.textContent = formatTime(audio.duration);
             });
-            audio.addEventListener('ended', handleTrackEnd); // Changed from nextTrack
+            audio.addEventListener('ended', handleTrackEnd);
 
             progressBar.addEventListener('input', () => {
                 if (!audio.src) return;
@@ -951,14 +1035,12 @@
                 updateSliderFill(e.target);
             });
 
-            // Add bouncy animation listeners to sliders
             [progressBar, volumeSlider].forEach(slider => {
                 slider.addEventListener('mousedown', () => slider.classList.add('slider-active'));
                 slider.addEventListener('mouseup', () => slider.classList.remove('slider-active'));
                 slider.addEventListener('mouseleave', () => slider.classList.remove('slider-active'));
             });
 
-            // --- Combined Ripple & Wobble Animation for Buttons ---
             function applyButtonEffects(button) {
                 button.addEventListener('mousedown', createRipple);
                 button.addEventListener('mouseup', () => button.classList.add('wobble-animate'));
@@ -1059,7 +1141,6 @@
                 button.appendChild(circle);
             }
             
-            // --- NEW: Keyboard Shortcuts ---
             function toggleMute() {
                 if (audio.volume > 0) {
                     preMuteVolume = audio.volume;
@@ -1073,12 +1154,11 @@
             }
             
             document.addEventListener('keydown', (e) => {
-                // Don't interfere with text inputs if any were added in the future
                 if (e.target.tagName === 'INPUT') return;
                 
                 switch(e.code) {
                     case 'Space':
-                        e.preventDefault(); // Prevent page from scrolling
+                        e.preventDefault();
                         playPauseToggle();
                         break;
                     case 'ArrowRight':
@@ -1093,7 +1173,6 @@
                 }
             });
 
-            // --- Initial Setup ---
             function init() {
                 audio.volume = volumeSlider.value / 100;
                 preMuteVolume = audio.volume;
@@ -1106,5 +1185,6 @@
     </script>
 </body>
 </html>
+
 
 
