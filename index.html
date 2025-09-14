@@ -94,7 +94,7 @@
             gap: 20px;
             width: 100%;
             max-width: 900px;
-            height: 500px;
+            height: 580px;
             max-height: 90vh;
         }
 
@@ -112,14 +112,20 @@
 
         /* --- Player Panel (Left) --- */
         .player-panel {
-            justify-content: space-between;
             text-align: center;
+            overflow: hidden; /* Prevents panel from expanding with long text */
         }
         
-        /* NEW: Transition for smooth fade effect */
-        #track-info, #album-art {
+        #album-art {
             transition: opacity 0.4s ease-in-out;
         }
+
+        #track-info {
+            width: 100%;
+            overflow: hidden; /* Prevents long titles from expanding the container */
+            transition: opacity 0.4s ease-in-out;
+        }
+
         #track-info.fade-out, #album-art.fade-out {
             opacity: 0;
         }
@@ -130,13 +136,16 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.5); /* Improved text visibility */
+            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
         }
 
         #track-info p {
             color: var(--secondary-text);
             font-size: 1rem;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.5); /* Improved text visibility */
+            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         
         .placeholder-art {
@@ -148,14 +157,14 @@
             align-items: center;
             justify-content: center;
             margin-bottom: 20px;
-            overflow: hidden; /* Ensure image corners are clipped */
+            overflow: hidden;
         }
         
         #album-art-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: none; /* FIX: Hide the image element by default */
+            display: none;
         }
 
         #album-art-placeholder svg {
@@ -166,7 +175,7 @@
 
         /* --- Controls & Sliders --- */
         .controls-wrapper {
-            margin-top: auto;
+             margin-top: auto; /* This pushes the controls to the bottom respecting padding */
         }
         
         .progress-bar-container {
@@ -180,7 +189,7 @@
             font-size: 0.8rem;
             color: var(--secondary-text);
             margin-bottom: 5px;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.5); /* Improved text visibility */
+            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
         }
 
         .playback-controls {
@@ -192,24 +201,25 @@
         }
 
         .control-btn {
-            position: relative; /* For ripple effect positioning */
-            overflow: hidden; /* To contain ripple effect */
+            position: relative;
+            overflow: hidden;
             background: 
-                radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.2), transparent 60%), /* Even softer highlight */
-                var(--glass-bg); /* Use the new, more transparent base */
-            border: 1px solid rgba(255, 255, 255, 0.1); /* Even softer border */
+                radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.2), transparent 60%),
+                var(--glass-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             color: var(--primary-text);
             cursor: pointer;
-            padding: 10px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
             box-shadow: 
-                inset 0 1px 2px rgba(255, 255, 255, 0.25), /* Defined top inner edge */
-                inset 0 -1px 1px rgba(0, 0, 0, 0.15), /* Defined bottom inner edge */
-                0 4px 8px rgba(0, 0, 0, 0.3); /* Softer, more diffused outer shadow */
+                inset 0 1px 2px rgba(255, 255, 255, 0.25),
+                inset 0 -1px 1px rgba(0, 0, 0, 0.15),
+                0 4px 8px rgba(0, 0, 0, 0.3);
         }
         
         .control-btn .icon-container {
@@ -226,32 +236,33 @@
         }
 
         .control-btn:hover {
-            background-color: var(--highlight-bg); /* Add base color change on hover */
-            transform: scale(1.1) translateY(-2px); /* Lift up more */
+            background-color: var(--highlight-bg);
+            transform: scale(1.1) translateY(-2px);
             box-shadow: 
                 inset 0 1px 1px rgba(255, 255, 255, 0.3),
                 inset 0 -1px 1px rgba(0, 0, 0, 0.1),
-                0 8px 15px rgba(0, 0, 0, 0.3); /* Enhance shadow on hover */
+                0 8px 15px rgba(0, 0, 0, 0.3);
         }
 
         .control-btn:active {
-            transform: scale(0.95); /* Press down */
+            transform: scale(0.95);
             box-shadow: 
-                inset 0 3px 4px rgba(0, 0, 0, 0.3), /* Deeper inner shadow when pressed */
-                0 1px 2px rgba(0,0,0,0.4); /* Minimal outer shadow */
+                inset 0 3px 4px rgba(0, 0, 0, 0.3),
+                0 1px 2px rgba(0,0,0,0.4);
         }
         
-        /* Updated active state for buttons like shuffle */
         .control-btn.active {
-            background-color: rgba(100, 180, 255, 0.2); /* Subtle blue tint for 'on' state */
+            background-color: rgba(100, 180, 255, 0.2);
             box-shadow: 
                 inset 0 1px 2px rgba(255, 255, 255, 0.25),
                 inset 0 -1px 1px rgba(0, 0, 0, 0.15),
-                0 0 15px rgba(100, 180, 255, 0.4), /* Softer outer glow for active state */
+                0 0 15px rgba(100, 180, 255, 0.4),
                 0 4px 8px rgba(0, 0, 0, 0.3);
         }
 
         #play-pause-btn {
+            width: 52px;
+            height: 52px;
             transform: scale(1.1);
         }
         
@@ -282,31 +293,28 @@
             height: 20px;
         }
 
-        /* --- Custom Liquid Gel Slider Styles --- */
         input[type="range"] {
             -webkit-appearance: none;
             appearance: none;
             width: 100%;
-            height: 12px; /* Make track thicker */
-            background: transparent; /* Track background is handled by track pseudo-element */
+            height: 12px;
+            background: transparent;
             outline: none;
             cursor: pointer;
         }
         
-        /* Gel-like Thumb */
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
             width: 20px;
             height: 20px;
-            /* Water-gel transparent effect: Further reduced opacity for a more watery look */
             background: 
                 radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.25), transparent 70%),
                 rgba(255, 255, 255, 0.1);
             border-radius: 50%;
-            border: 1px solid rgba(255, 255, 255, 0.15); /* More transparent border */
+            border: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 4px 8px rgba(0,0,0,0.35),
-                        inset 0 1px 1px rgba(255,255,255,0.3), /* Less frosty inner highlight */
+                        inset 0 1px 1px rgba(255,255,255,0.3),
                         inset 0 -1px 1px rgba(0,0,0,0.1);
             margin-top: -4px;
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -315,7 +323,6 @@
         input[type="range"]::-moz-range-thumb {
             width: 20px;
             height: 20px;
-            /* Water-gel transparent effect for Firefox */
             background: 
                 radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.25), transparent 70%),
                 rgba(255, 255, 255, 0.1);
@@ -324,10 +331,9 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.35), inset 0 1px 1px rgba(255,255,255,0.3), inset 0 -1px 1px rgba(0,0,0,0.1);
         }
         
-        /* Bouncy Animation on interaction */
         input[type="range"].slider-active::-webkit-slider-thumb {
-            transform: scale(1.25); /* Enlarge thumb when dragging */
-            transition: transform 0.1s ease-out; /* Quick reaction on click */
+            transform: scale(1.25);
+            transition: transform 0.1s ease-out;
         }
         
         input[type="range"]:hover::-webkit-slider-thumb {
@@ -337,19 +343,16 @@
             transform: scale(1.15);
         }
         
-        /* Glassy Indented Track */
         input[type="range"]::-webkit-slider-runnable-track {
             height: 12px;
-            /* FIXED: Removed the '- 10px' calculation to eliminate the gap between the track and thumb. */
             background: linear-gradient(to right, 
-                        rgba(255,255,255,0.15) var(--fill-percent, 0%), /* Made fill even more transparent */
+                        rgba(255,255,255,0.15) var(--fill-percent, 0%),
                         rgba(0,0,0,0.25) var(--fill-percent, 0%)
                         );
             border-radius: 10px;
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
         }
 
-        /* NEW: Proper Firefox Styling using native pseudo-elements */
         input[type="range"]::-moz-range-track {
             height: 12px;
             background: rgba(0,0,0,0.25);
@@ -359,7 +362,7 @@
 
         input[type="range"]::-moz-range-progress {
             height: 12px;
-            background: rgba(255,255,255,0.15); /* Made fill even more transparent */
+            background: rgba(255,255,255,0.15);
             border-radius: 10px;
         }
         
@@ -381,35 +384,33 @@
 
         #playlist-header-controls {
             display: flex;
-            gap: 8px; /* Spacing between buttons */
+            gap: 8px;
         }
 
-        #playlist {
+        .playlist {
             list-style: none;
             height: 100%;
             overflow-y: auto;
-            padding: 0 10px; /* Symmetrical padding, prevents clipping */
+            padding: 0 10px;
         }
         
-        /* --- Custom "Liquid" Scrollbar --- */
-        #playlist::-webkit-scrollbar {
-            width: 14px; /* Wider to accommodate the floating effect */
+        .playlist::-webkit-scrollbar {
+            width: 14px;
         }
-        #playlist::-webkit-scrollbar-track {
-            background: transparent; /* Makes the track invisible */
+        .playlist::-webkit-scrollbar-track {
+            background: transparent;
         }
-        #playlist::-webkit-scrollbar-thumb {
-            background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent handle */
+        .playlist::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.2);
             border-radius: 10px;
-            border: 4px solid transparent; /* Creates the "floating" space */
-            background-clip: content-box; /* Ensures border is transparent */
+            border: 4px solid transparent;
+            background-clip: content-box;
             transition: background-color 0.2s;
         }
-        #playlist::-webkit-scrollbar-thumb:hover {
-            background-color: rgba(255, 255, 255, 0.4); /* More visible on hover */
+        .playlist::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(255, 255, 255, 0.4);
         }
         
-        /* NEW: Styles for playlist items with album art */
         .playlist-item {
             display: flex;
             align-items: center;
@@ -420,6 +421,11 @@
             cursor: pointer;
             transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
             transform: scale(1);
+        }
+        
+        .playlist-item.dragging {
+            opacity: 0.5;
+            background: var(--highlight-bg);
         }
 
         .playlist-item-art {
@@ -447,11 +453,67 @@
         }
 
         .playlist-item-info {
-            font-size: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+            flex-grow: 1;
+        }
+
+        .playlist-item-title, .playlist-item-artist {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+        }
+
+        .playlist-item-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--primary-text);
+        }
+
+        .playlist-item-artist {
+            font-size: 0.8rem;
+            color: var(--secondary-text);
+        }
+        
+        .playlist-item-drag-handle, .playlist-item-remove-btn {
+            display: none;
+            align-items: center;
+            color: var(--secondary-text);
+            cursor: pointer;
+            transition: color 0.2s;
+            padding: 4px;
+            flex-shrink: 0;
+        }
+
+        .playlist-item-drag-handle {
+            cursor: grab;
+            margin-right: 8px;
+        }
+
+        .playlist-item-drag-handle:hover, .playlist-item-remove-btn:hover {
+            color: var(--primary-text);
+        }
+
+        .playlist-item-remove-btn {
+            color: #ff8a8a;
+            margin-left: auto;
+        }
+        .playlist-item-remove-btn:hover {
+            color: #ff4d4d;
+        }
+
+        .playlist.edit-mode .playlist-item-drag-handle,
+        .playlist.edit-mode .playlist-item-remove-btn {
+            display: flex;
+        }
+        .playlist.edit-mode .playlist-item {
+            cursor: grab;
+        }
+        .playlist.edit-mode .playlist-item:active {
+            cursor: grabbing;
         }
 
         .playlist-item:hover {
@@ -460,22 +522,20 @@
 
         .playlist-item.active {
             background: 
-                radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.15), transparent 80%), /* Soft top sheen */
-                rgba(255, 255, 255, 0.2); /* Slightly brighter base */
-            color: var(--primary-text); /* Ensure text is bright */
-            transform: scale(1.03); /* Lift effect */
+                radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.12), transparent 80%),
+                rgba(255, 255, 255, 0.12);
+            transform: scale(1.03);
             box-shadow: 
-                inset 0 1px 1px rgba(255, 255, 255, 0.2), /* Gel edge */
-                inset 0 -1px 1px rgba(0, 0, 0, 0.1), /* Gel edge */
-                0 6px 12px rgba(0,0,0,0.25); /* Enhanced lift shadow */
-            border: 1px solid rgba(255, 255, 255, 0.15); /* Add a subtle border to match buttons */
+                inset 0 1px 1px rgba(255, 255, 255, 0.15),
+                inset 0 -1px 1px rgba(0, 0, 0, 0.1),
+                0 5px 10px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.12);
         }
         
-        .playlist-item.active .playlist-item-info {
-            font-weight: 500;
+        .playlist-item.active .playlist-item-title {
+            font-weight: 700;
         }
         
-        /* --- Folder Selection --- */
         #folder-selector {
             display: flex;
             flex-direction: column;
@@ -486,8 +546,8 @@
         }
         
         #select-folder-btn {
-            position: relative; /* For ripple effect */
-            overflow: hidden; /* For ripple effect */
+            position: relative;
+            overflow: hidden;
             background: 
                 radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.2), transparent 80%),
                 var(--glass-bg);
@@ -525,40 +585,35 @@
             display: none;
         }
         
-        /* --- Ripple Animation for Buttons --- */
         .ripple {
             position: absolute;
             border-radius: 50%;
-            /* Reduced intensity by making the gradient more transparent */
             background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 70%);
             transform: scale(0);
-            /* Made animation slightly faster and smaller */
             animation: ripple-animation 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
-            pointer-events: none; /* Prevent interference with clicks */
+            pointer-events: none;
         }
 
         @keyframes ripple-animation {
             to {
-                transform: scale(3); /* Reduced final scale */
+                transform: scale(3);
                 opacity: 0;
             }
         }
 
-        /* --- NEW: Jelly Wobble Animation --- */
         @keyframes wobble-effect {
-            0% { transform: scale(0.95); } /* Start from the active/pressed state */
-            50% { transform: scale(1.15) translateY(-2px); } /* Overshoot for bounce, maintaining hover lift */
-            100% { transform: scale(1.1) translateY(-2px); } /* Settle back to hover state */
+            0% { transform: scale(0.95); }
+            50% { transform: scale(1.15) translateY(-2px); }
+            100% { transform: scale(1.1) translateY(-2px); }
         }
 
         @keyframes play-wobble-effect {
-            0% { transform: scale(1.05); } /* Start from its active state (base 1.1 * 0.95) */
-            50% { transform: scale(1.25) translateY(-2px); } /* Overshoot a bit more */
-            100% { transform: scale(1.2) translateY(-2px); } /* Settle back to its hover state */
+            0% { transform: scale(1.05); }
+            50% { transform: scale(1.25) translateY(-2px); }
+            100% { transform: scale(1.2) translateY(-2px); }
         }
 
         .wobble-animate {
-            /* We use !important to ensure the animation overrides the :hover transform temporarily */
             animation: wobble-effect 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
         }
 
@@ -570,75 +625,99 @@
         /* --- Responsive Design --- */
         @media (max-width: 800px) {
             html, body {
-                overflow-y: auto; /* Allow vertical scrolling on mobile */
+                overflow-y: auto;
             }
             body {
-                padding: 2rem 1rem; /* Adjust padding for top/bottom and sides */
-                align-items: flex-start; /* Align player to the top, preventing cutoff */
+                padding: 2rem 1rem;
+                align-items: flex-start;
             }
 
             .music-player {
                 grid-template-columns: 1fr;
                 grid-template-rows: auto 1fr;
-                max-width: 420px; /* Slightly increased max-width for modern phones */
-                height: auto; /* Let height be determined by content */
-                min-height: 90vh; /* Ensure it still feels substantial */
-                max-height: none; /* Remove max-height to allow scrolling */
-                gap: 15px; /* Reduced gap between panels */
+                max-width: 420px;
+                height: auto;
+                min-height: 90vh;
+                max-height: none;
+                gap: 15px;
             }
             .glass-panel {
-                padding: 20px; /* Reduced padding inside panels */
+                padding: 20px;
             }
             
             #track-info h2 {
-                font-size: 1.25rem; /* Smaller track title */
+                font-size: 1.25rem;
             }
             
             #track-info p {
-                font-size: 0.9rem; /* Smaller artist name */
+                font-size: 0.9rem;
             }
 
             .playback-controls {
-                gap: 15px; /* Tighter spacing for control buttons */
+                gap: 15px;
+            }
+
+            .control-btn {
+                width: 42px;
+                height: 42px;
+            }
+            
+            #play-pause-btn {
+                width: 50px;
+                height: 50px;
             }
 
             .control-btn svg {
-                width: 22px; /* Smaller icons */
+                width: 22px;
                 height: 22px;
             }
             
             #play-pause-btn svg {
-                width: 30px; /* Smaller play/pause icon */
+                width: 30px;
                 height: 30px;
             }
 
-            #playlist {
-                padding: 0 5px; /* Adjusted playlist padding */
+            .playlist {
+                padding: 0 5px;
             }
+        }
+        
+        /* --- Marquee Animation for long text --- */
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+        
+        #track-info.playing h2.scrolling,
+        #track-info.playing p.scrolling,
+        .playlist-item.active .playlist-item-title.scrolling,
+        .playlist-item.active .playlist-item-artist.scrolling {
+            text-overflow: clip; 
+        }
+
+        #track-info.playing .scrolling span,
+        .playlist-item.active .scrolling span {
+            display: inline-block;
+            animation: marquee 25s linear infinite;
         }
     </style>
 </head>
 <body>
-    <!-- Animated background element -->
     <div class="background-container">
         <div class="blob"></div>
         <div class="blob"></div>
         <div class="blob"></div>
     </div>
 
-    <!-- Main application container -->
     <div class="music-player">
-        <!-- Left Panel: Player and Controls -->
         <div class="glass-panel player-panel">
             <div>
-                <!-- NEW: container for smooth fade effect -->
                 <div class="placeholder-art" id="album-art">
                     <img id="album-art-img" src="" alt="Album Art">
                     <div id="album-art-placeholder">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
                     </div>
                 </div>
-                <!-- NEW: container for smooth fade effect -->
                 <div id="track-info">
                     <h2 id="track-title">No song playing</h2>
                     <p id="track-artist">Select a folder to begin</p>
@@ -677,7 +756,6 @@
             </div>
         </div>
 
-        <!-- Right Panel: Playlist -->
         <div class="glass-panel playlist-panel">
             <div id="playlist-header">
                  <h2>Playlist</h2>
@@ -685,7 +763,9 @@
                     <button class="control-btn" id="change-folder-btn" title="Select another folder">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path><line x1="12" y1="11" x2="12" y2="17"></line><line x1="9" y1="14" x2="15" y2="14"></line></svg>
                     </button>
-                    <!-- NEW: Repeat Button -->
+                    <button class="control-btn" id="edit-playlist-btn" title="Reorder Playlist">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                    </button>
                     <button class="control-btn" id="repeat-btn" aria-label="Repeat">
                         <div class="icon-container">
                             <svg id="repeat-icon-all" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
@@ -705,7 +785,7 @@
                 <input type="file" id="folder-input" webkitdirectory directory>
             </div>
             
-            <ul id="playlist" style="display: none;">
+            <ul id="playlist" class="playlist" style="display: none;">
                 <!-- Playlist items will be injected here by JavaScript -->
             </ul>
         </div>
@@ -720,8 +800,8 @@
             const folderSelectorView = document.getElementById('folder-selector');
             const playlistView = document.getElementById('playlist');
             
-            const trackInfo = document.getElementById('track-info'); // For fade effect
-            const albumArtContainer = document.getElementById('album-art'); // For fade effect
+            const trackInfo = document.getElementById('track-info');
+            const albumArtContainer = document.getElementById('album-art');
             const trackTitle = document.getElementById('track-title');
             const trackArtist = document.getElementById('track-artist');
             const albumArtImg = document.getElementById('album-art-img');
@@ -733,10 +813,11 @@
             const prevBtn = document.getElementById('prev-btn');
             const nextBtn = document.getElementById('next-btn');
             const shuffleBtn = document.getElementById('shuffle-btn');
-            const repeatBtn = document.getElementById('repeat-btn'); // New
-            const repeatIconAll = document.getElementById('repeat-icon-all'); // New
-            const repeatIconOne = document.getElementById('repeat-icon-one'); // New
+            const repeatBtn = document.getElementById('repeat-btn');
+            const repeatIconAll = document.getElementById('repeat-icon-all');
+            const repeatIconOne = document.getElementById('repeat-icon-one');
             const changeFolderBtn = document.getElementById('change-folder-btn');
+            const editPlaylistBtn = document.getElementById('edit-playlist-btn');
 
             const progressBar = document.getElementById('progress-bar');
             const currentTimeEl = document.getElementById('current-time');
@@ -748,8 +829,9 @@
             let playlist = [];
             let currentIndex = 0;
             let isShuffled = false;
+            let isEditingPlaylist = false;
             let repeatState = 0; // 0: no-repeat, 1: repeat-all, 2: repeat-one
-            let preMuteVolume = 0.8; // New
+            let preMuteVolume = 0.8;
 
             // --- Web Audio API for Visualization ---
             let audioContext;
@@ -772,12 +854,10 @@
                     return;
                 }
 
-                // Show a loading state
                 playlistView.innerHTML = `<li class="playlist-item" style="justify-content: center;">Loading music...</li>`;
                 folderSelectorView.style.display = 'none';
                 playlistView.style.display = 'block';
 
-                // Helper to read tags for a single file and return a promise
                 const readTags = (file) => new Promise((resolve) => {
                     const trackInfo = {
                         name: file.name.replace(/\.[^/.]+$/, ""),
@@ -794,8 +874,6 @@
                             trackInfo.title = title || trackInfo.name;
                             trackInfo.artist = artist || "Unknown Artist";
                             if (picture) {
-                                // FIX: A more robust way to handle large image data that avoids "Maximum call stack size exceeded" error.
-                                // The old method (String.fromCharCode.apply) fails on large arrays.
                                 let binary = '';
                                 const bytes = picture.data;
                                 const len = bytes.length;
@@ -809,16 +887,29 @@
                         },
                         onError: (error) => {
                             console.log(`Could not read metadata for ${file.name}:`, error.type, error.info);
-                            resolve(trackInfo); // Resolve with default info on error
+                            resolve(trackInfo);
                         }
                     });
                 });
 
-                // Use Promise.all to wait for all metadata to be read
                 playlist = await Promise.all(audioFiles.map(file => readTags(file)));
-
                 renderPlaylist();
                 loadTrack(0);
+            }
+
+            function setupScrollableText(element, text) {
+                element.classList.remove('scrolling');
+                // Set the plain text content first to accurately measure if it overflows
+                element.textContent = text;
+
+                // Check if the element's scroll width is greater than its visible width
+                if (element.scrollWidth > element.clientWidth) {
+                    // If it overflows, add the scrolling class
+                    element.classList.add('scrolling');
+                    // Then, wrap the duplicated text in a span for the CSS animation
+                    element.innerHTML = `<span>${text}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${text}</span>`;
+                }
+                // If it doesn't overflow, the text content is already correctly set and no class is needed.
             }
 
             function renderPlaylist() {
@@ -827,6 +918,12 @@
                     const li = document.createElement('li');
                     li.className = 'playlist-item';
                     li.dataset.index = index;
+                    li.draggable = isEditingPlaylist;
+
+                    const dragHandle = document.createElement('div');
+                    dragHandle.className = 'playlist-item-drag-handle';
+                    dragHandle.title = 'Drag to reorder';
+                    dragHandle.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4L12 2L16 4"/><path d="M8 20L12 22L16 20"/><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/></svg>`;
 
                     const artContainer = document.createElement('div');
                     artContainer.className = 'playlist-item-art';
@@ -842,24 +939,59 @@
 
                     const infoContainer = document.createElement('div');
                     infoContainer.className = 'playlist-item-info';
-                    infoContainer.textContent = track.title;
 
+                    const titleEl = document.createElement('div');
+                    titleEl.className = 'playlist-item-title';
+                    setupScrollableText(titleEl, track.title);
+
+                    const artistEl = document.createElement('div');
+                    artistEl.className = 'playlist-item-artist';
+                    setupScrollableText(artistEl, track.artist);
+
+                    infoContainer.appendChild(titleEl);
+                    infoContainer.appendChild(artistEl);
+                    
+                    const removeBtn = document.createElement('div');
+                    removeBtn.className = 'playlist-item-remove-btn';
+                    removeBtn.title = 'Remove from playlist';
+                    removeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`;
+
+                    li.appendChild(dragHandle);
                     li.appendChild(artContainer);
                     li.appendChild(infoContainer);
+                    li.appendChild(removeBtn);
                     
-                    li.addEventListener('click', () => {
+                    li.addEventListener('click', (e) => {
+                        if (isEditingPlaylist) return;
                         currentIndex = index;
-                        loadTrack(currentIndex);
-                        playTrack();
+                        loadTrack(currentIndex, true);
                     });
+
+                    removeBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        removeTrack(index);
+                    });
+
                     playlistView.appendChild(li);
                 });
                 updateActiveTrackHighlight();
+                setupDragAndDrop();
             }
 
             // --- Playback Logic ---
             function loadTrack(index, isPlaying = false) {
-                if (index < 0 || index >= playlist.length) return;
+                if (index < 0 || index >= playlist.length) {
+                    if (playlist.length === 0) {
+                        setupScrollableText(trackTitle, "No song playing");
+                        setupScrollableText(trackArtist, "Select a folder to begin");
+                        albumArtImg.src = '';
+                        albumArtImg.style.display = 'none';
+                        albumArtPlaceholder.style.display = 'flex';
+                        audio.src = '';
+                        pauseTrack();
+                    }
+                    return;
+                };
                 
                 albumArtContainer.classList.add('fade-out');
                 trackInfo.classList.add('fade-out');
@@ -868,9 +1000,8 @@
                     const track = playlist[index];
                     audio.src = track.url;
                     
-                    // Use pre-loaded metadata
-                    trackTitle.textContent = track.title;
-                    trackArtist.textContent = track.artist;
+                    setupScrollableText(trackTitle, track.title);
+                    setupScrollableText(trackArtist, track.artist);
 
                     if (track.albumArtUrl) {
                         albumArtImg.src = track.albumArtUrl;
@@ -892,6 +1023,8 @@
                     
                     if (isPlaying) {
                         playTrack();
+                    } else {
+                        pauseTrack();
                     }
 
                 }, 250);
@@ -910,12 +1043,14 @@
                 audio.play();
                 playIcon.style.display = 'none';
                 pauseIcon.style.display = 'block';
+                trackInfo.classList.add('playing');
             }
 
             function pauseTrack() {
                 audio.pause();
                 playIcon.style.display = 'block';
                 pauseIcon.style.display = 'none';
+                trackInfo.classList.remove('playing');
             }
 
             function playPauseToggle() {
@@ -960,7 +1095,7 @@
                 if (playlist.length === 0) return;
 
                 if (isShuffled) {
-                    nextTrack(); // In shuffle mode, "previous" plays another random song
+                    nextTrack();
                     return;
                 } else {
                     currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
@@ -977,7 +1112,112 @@
                 repeatState = (repeatState + 1) % 3;
                 updateRepeatButton();
             }
-            
+
+            // --- Playlist Editing Logic ---
+            function toggleEditPlaylist() {
+                isEditingPlaylist = !isEditingPlaylist;
+                playlistView.classList.toggle('edit-mode', isEditingPlaylist);
+                editPlaylistBtn.classList.toggle('active', isEditingPlaylist);
+                renderPlaylist();
+            }
+
+            function removeTrack(indexToRemove) {
+                const wasPlaying = !audio.paused && currentIndex === indexToRemove;
+                
+                playlist.splice(indexToRemove, 1);
+                
+                if (playlist.length === 0) {
+                    currentIndex = -1;
+                    loadTrack(currentIndex);
+                } else {
+                    if (currentIndex > indexToRemove || currentIndex === playlist.length) {
+                        currentIndex--;
+                    }
+                    if (currentIndex === indexToRemove) {
+                         loadTrack(currentIndex, wasPlaying);
+                    }
+                }
+                renderPlaylist();
+            }
+
+            function setupDragAndDrop() {
+                if (!isEditingPlaylist) return;
+                
+                let draggedItem = null;
+
+                const handleDragEnd = () => {
+                    if (!draggedItem) return;
+                    draggedItem.classList.remove('dragging');
+                    
+                    const currentPlayingUrl = playlist[currentIndex]?.url;
+                    
+                    const domOrderMap = Array.from(playlistView.children).map(li => {
+                        return parseInt(li.dataset.index);
+                    });
+                    
+                    playlist = domOrderMap.map(originalIndex => playlist[originalIndex]);
+
+                    currentIndex = playlist.findIndex(track => track.url === currentPlayingUrl);
+                    if (currentIndex === -1 && playlist.length > 0) currentIndex = 0;
+                    
+                    draggedItem = null;
+                    renderPlaylist();
+                };
+
+                playlistView.querySelectorAll('.playlist-item').forEach(item => {
+                    item.addEventListener('dragstart', (e) => {
+                        draggedItem = item;
+                        setTimeout(() => item.classList.add('dragging'), 0);
+                    });
+
+                    item.addEventListener('dragend', handleDragEnd);
+
+                    item.addEventListener('dragover', e => {
+                        e.preventDefault();
+                        const afterElement = getDragAfterElement(playlistView, e.clientY);
+                        if (afterElement == null) {
+                            playlistView.appendChild(draggedItem);
+                        } else {
+                            playlistView.insertBefore(draggedItem, afterElement);
+                        }
+                    });
+
+                    item.addEventListener('touchstart', (e) => {
+                        if (e.target.closest('.playlist-item-drag-handle')) {
+                            draggedItem = item;
+                            item.classList.add('dragging');
+                        }
+                    }, { passive: true });
+
+                    item.addEventListener('touchmove', (e) => {
+                        if (!draggedItem) return;
+                        e.preventDefault();
+                        const y = e.touches[0].clientY;
+                        const afterElement = getDragAfterElement(playlistView, y);
+                         if (afterElement == null) {
+                            playlistView.appendChild(draggedItem);
+                        } else {
+                            playlistView.insertBefore(draggedItem, afterElement);
+                        }
+                    }, { passive: false });
+
+                    item.addEventListener('touchend', handleDragEnd);
+                });
+            }
+
+            function getDragAfterElement(container, y) {
+                const draggableElements = [...container.querySelectorAll('.playlist-item:not(.dragging)')];
+                return draggableElements.reduce((closest, child) => {
+                    const box = child.getBoundingClientRect();
+                    const offset = y - box.top - box.height / 2;
+                    if (offset < 0 && offset > closest.offset) {
+                        return { offset: offset, element: child };
+                    } else {
+                        return closest;
+                    }
+                }, { offset: Number.NEGATIVE_INFINITY }).element;
+            }
+
             function updateRepeatButton() {
                 repeatBtn.classList.remove('active');
                 repeatIconAll.style.display = 'none';
@@ -1001,25 +1241,22 @@
                 const activeItem = document.querySelector(`.playlist-item[data-index='${currentIndex}']`);
                 if (activeItem) {
                     activeItem.classList.add('active');
-                    // On mobile, the user might want to stay focused on the player controls.
-                    // We'll only scroll the playlist into view on desktop screens.
-                    if (window.matchMedia("(min-width: 801px)").matches) {
+                    if (window.matchMedia("(min-width: 801px)").matches && !isEditingPlaylist) {
                         activeItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }
                 }
             }
 
-
-            // --- UI & Event Listeners ---
             playPauseBtn.addEventListener('click', playPauseToggle);
             nextBtn.addEventListener('click', nextTrack);
             prevBtn.addEventListener('click', prevTrack);
             shuffleBtn.addEventListener('click', toggleShuffle);
             repeatBtn.addEventListener('click', toggleRepeat);
+            editPlaylistBtn.addEventListener('click', toggleEditPlaylist);
 
             audio.addEventListener('timeupdate', updateProgressBar);
             audio.addEventListener('loadedmetadata', () => {
-                progressBar.max = audio.duration;
+                progressBar.max = Math.floor(audio.duration);
                 totalDurationEl.textContent = formatTime(audio.duration);
             });
             audio.addEventListener('ended', handleTrackEnd);
@@ -1052,8 +1289,6 @@
             }
             document.querySelectorAll('.control-btn, #select-folder-btn').forEach(applyButtonEffects);
 
-
-            // --- Visualization Logic ---
             function setupAudioAnalysis() {
                 if (isAudioContextSetup) return;
                 audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -1085,7 +1320,6 @@
                 backgroundContainer.style.filter = `blur(100px) saturate(${saturation.toFixed(2)})`;
             }
 
-            // --- Utility Functions ---
             function updateProgressBar() {
                 progressBar.value = audio.currentTime;
                 currentTimeEl.textContent = formatTime(audio.currentTime);
@@ -1093,13 +1327,16 @@
             }
 
             function formatTime(seconds) {
+                if (isNaN(seconds)) return "0:00";
                 const minutes = Math.floor(seconds / 60);
                 const secs = Math.floor(seconds % 60);
                 return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
             }
 
             function updateSliderFill(slider) {
-                const percentage = (slider.value - slider.min) / (slider.max - slider.min) * 100;
+                const max = slider.max || 100;
+                const min = slider.min || 0;
+                const percentage = (slider.value - min) / (max - min) * 100;
                 slider.style.setProperty('--fill-percent', `${percentage}%`);
             }
 
@@ -1178,6 +1415,8 @@
                 preMuteVolume = audio.volume;
                 updateSliderFill(volumeSlider);
                 updateSliderFill(progressBar);
+                setupScrollableText(trackTitle, "No song playing");
+                setupScrollableText(trackArtist, "Select a folder to begin");
             }
             
             init();
@@ -1185,6 +1424,4 @@
     </script>
 </body>
 </html>
-
-
 
