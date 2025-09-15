@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#121212">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liquid Glass Music Player</title>
@@ -13,13 +16,18 @@
         :root {
             --bg-color: #121212;
             --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            --glass-bg: rgba(255, 255, 255, 0.08); /* More transparent base */
-            --glass-border: rgba(255, 255, 255, 0.1); /* Softer border */
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            /* More transparent base */
+            --glass-border: rgba(255, 255, 255, 0.1);
+            /* Softer border */
             --shadow-color: rgba(0, 0, 0, 0.25);
             --primary-text: #ffffff;
-            --secondary-text: #cccccc; /* Increased contrast for better visibility */
-            --highlight-bg: rgba(255, 255, 255, 0.1); /* More subtle highlight */
-            --blur-amount: 30px; /* Slightly less blur for a clearer look */
+            --secondary-text: #cccccc;
+            /* Increased contrast for better visibility */
+            --highlight-bg: rgba(255, 255, 255, 0.1);
+            /* More subtle highlight */
+            --blur-amount: 30px;
+            /* Slightly less blur for a clearer look */
             --saturation-amount: 180%;
             --border-radius: 24px;
         }
@@ -30,9 +38,12 @@
             padding: 0;
         }
 
-        html, body {
-            min-height: 100%; /* Allow body to grow vertically */
-            overflow-x: hidden; /* Prevent horizontal scroll from blobs */
+        html,
+        body {
+            min-height: 100%;
+            /* Allow body to grow vertically */
+            overflow-x: hidden;
+            /* Prevent horizontal scroll from blobs */
         }
 
         body {
@@ -54,36 +65,55 @@
             height: 100%;
             z-index: -1;
             overflow: hidden;
-            filter: blur(100px) saturate(1.2); /* Blends the blobs into a soft gradient */
-            transition: filter 0.5s ease-out; /* For beat reaction */
+            filter: blur(100px) saturate(1.2);
+            /* Blends the blobs into a soft gradient */
+            transition: filter 0.5s ease-out;
+            /* For beat reaction */
         }
-        
+
         .blob {
             position: absolute;
             border-radius: 50%;
             opacity: 0.7;
-            transition: background 1.5s ease-in-out; /* Smooth color transition for blobs */
+            transition: background 1.5s ease-in-out;
+            /* Smooth color transition for blobs */
         }
 
         .blob:nth-child(1) {
-            width: 50vmax; height: 50vmax; top: -20%; left: -20%;
+            width: 50vmax;
+            height: 50vmax;
+            top: -20%;
+            left: -20%;
             background: #4e00c2;
             animation: move 25s infinite alternate;
         }
+
         .blob:nth-child(2) {
-            width: 40vmax; height: 40vmax; top: 60%; left: 70%;
+            width: 40vmax;
+            height: 40vmax;
+            top: 60%;
+            left: 70%;
             background: #0093e9;
             animation: move 30s -10s infinite alternate;
         }
+
         .blob:nth-child(3) {
-            width: 30vmax; height: 30vmax; top: 20%; left: 50%;
+            width: 30vmax;
+            height: 30vmax;
+            top: 20%;
+            left: 50%;
             background: #80d0c7;
             animation: move 20s -5s infinite alternate;
         }
 
         @keyframes move {
-            from { transform: translate(-20%, 10%) rotate(0deg) scale(1); }
-            to { transform: translate(10%, -20%) rotate(360deg) scale(1.2); }
+            from {
+                transform: translate(-20%, 10%) rotate(0deg) scale(1);
+            }
+
+            to {
+                transform: translate(10%, -20%) rotate(360deg) scale(1.2);
+            }
         }
 
 
@@ -113,45 +143,48 @@
         /* --- Player Panel (Left) --- */
         .player-panel {
             text-align: center;
-            overflow: hidden; /* Prevents panel from expanding with long text */
+            overflow: hidden;
+            /* Prevents panel from expanding with long text */
         }
-        
+
         #album-art {
             transition: opacity 0.4s ease-in-out;
         }
 
         #track-info {
             width: 100%;
-            overflow: hidden; /* Prevents long titles from expanding the container */
+            overflow: hidden;
+            /* Prevents long titles from expanding the container */
             transition: opacity 0.4s ease-in-out;
         }
 
-        #track-info.fade-out, #album-art.fade-out {
+        #track-info.fade-out,
+        #album-art.fade-out {
             opacity: 0;
         }
-        
+
         #track-info h2 {
             font-size: 1.5rem;
             margin-bottom: 0.5rem;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
         }
 
         #track-info p {
             color: var(--secondary-text);
             font-size: 1rem;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        
+
         .placeholder-art {
             width: 100%;
             aspect-ratio: 1/1;
-            background: rgba(0,0,0,0.2);
+            background: rgba(0, 0, 0, 0.2);
             border-radius: 16px;
             display: flex;
             align-items: center;
@@ -159,7 +192,7 @@
             margin-bottom: 20px;
             overflow: hidden;
         }
-        
+
         #album-art-img {
             width: 100%;
             height: 100%;
@@ -175,9 +208,10 @@
 
         /* --- Controls & Sliders --- */
         .controls-wrapper {
-             margin-top: auto; /* This pushes the controls to the bottom respecting padding */
+            margin-top: auto;
+            /* This pushes the controls to the bottom respecting padding */
         }
-        
+
         .progress-bar-container {
             width: 100%;
             margin-bottom: 1rem;
@@ -189,7 +223,7 @@
             font-size: 0.8rem;
             color: var(--secondary-text);
             margin-bottom: 5px;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
         }
 
         .playback-controls {
@@ -203,7 +237,7 @@
         .control-btn {
             position: relative;
             overflow: hidden;
-            background: 
+            background:
                 radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.2), transparent 60%),
                 var(--glass-bg);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -216,17 +250,18 @@
             align-items: center;
             justify-content: center;
             transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 
+            box-shadow:
                 inset 0 1px 2px rgba(255, 255, 255, 0.25),
                 inset 0 -1px 1px rgba(0, 0, 0, 0.15),
                 0 4px 8px rgba(0, 0, 0, 0.3);
         }
-        
+
         .control-btn .icon-container {
-             position: relative;
-             width: 24px;
-             height: 24px;
+            position: relative;
+            width: 24px;
+            height: 24px;
         }
+
         .control-btn .icon-container svg {
             position: absolute;
             top: 0;
@@ -238,7 +273,7 @@
         .control-btn:hover {
             background-color: var(--highlight-bg);
             transform: scale(1.1) translateY(-2px);
-            box-shadow: 
+            box-shadow:
                 inset 0 1px 1px rgba(255, 255, 255, 0.3),
                 inset 0 -1px 1px rgba(0, 0, 0, 0.1),
                 0 8px 15px rgba(0, 0, 0, 0.3);
@@ -246,14 +281,14 @@
 
         .control-btn:active {
             transform: scale(0.95);
-            box-shadow: 
+            box-shadow:
                 inset 0 3px 4px rgba(0, 0, 0, 0.3),
-                0 1px 2px rgba(0,0,0,0.4);
+                0 1px 2px rgba(0, 0, 0, 0.4);
         }
-        
+
         .control-btn.active {
             background-color: rgba(100, 180, 255, 0.2);
-            box-shadow: 
+            box-shadow:
                 inset 0 1px 2px rgba(255, 255, 255, 0.25),
                 inset 0 -1px 1px rgba(0, 0, 0, 0.15),
                 0 0 15px rgba(100, 180, 255, 0.4),
@@ -265,7 +300,7 @@
             height: 52px;
             transform: scale(1.1);
         }
-        
+
         #play-pause-btn:hover {
             transform: scale(1.2) translateY(-2px);
         }
@@ -274,9 +309,9 @@
             width: 24px;
             height: 24px;
         }
-        
+
         #play-pause-btn svg {
-             width: 32px;
+            width: 32px;
             height: 32px;
         }
 
@@ -287,10 +322,11 @@
             gap: 8px;
             color: var(--primary-text);
         }
-        
+
         #volume-btn {
             position: relative;
-            top: 2px; /* Nudge for better visual alignment */
+            top: 2px;
+            /* Nudge for better visual alignment */
             background: transparent;
             border: none;
             cursor: pointer;
@@ -302,12 +338,14 @@
             justify-content: left;
             transition: all 0.2s ease;
             box-shadow: none;
-            color: var(--secondary-text); /* Set icon color to light grey */
+            color: var(--secondary-text);
+            /* Set icon color to light grey */
         }
 
         #volume-btn:hover {
-           transform: scale(1.15);
+            transform: scale(1.15);
         }
+
         #volume-btn:active {
             transform: scale(0.95);
         }
@@ -326,20 +364,20 @@
             outline: none;
             cursor: pointer;
         }
-        
+
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
             width: 20px;
             height: 20px;
-            background: 
+            background:
                 radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.25), transparent 70%),
                 rgba(255, 255, 255, 0.1);
             border-radius: 50%;
             border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.35),
-                        inset 0 1px 1px rgba(255,255,255,0.3),
-                        inset 0 -1px 1px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.35),
+                inset 0 1px 1px rgba(255, 255, 255, 0.3),
+                inset 0 -1px 1px rgba(0, 0, 0, 0.1);
             margin-top: -4px;
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
@@ -347,54 +385,54 @@
         input[type="range"]::-moz-range-thumb {
             width: 20px;
             height: 20px;
-            background: 
+            background:
                 radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.25), transparent 70%),
                 rgba(255, 255, 255, 0.1);
             border-radius: 50%;
             border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.35), inset 0 1px 1px rgba(255,255,255,0.3), inset 0 -1px 1px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.3), inset 0 -1px 1px rgba(0, 0, 0, 0.1);
         }
-        
+
         input[type="range"].slider-active::-webkit-slider-thumb {
             transform: scale(1.25);
             transition: transform 0.1s ease-out;
         }
-        
+
         input[type="range"]:hover::-webkit-slider-thumb {
             transform: scale(1.15);
         }
+
         input[type="range"]:hover::-moz-range-thumb {
             transform: scale(1.15);
         }
-        
+
         input[type="range"]::-webkit-slider-runnable-track {
             height: 12px;
-            background: linear-gradient(to right, 
-                        rgba(255,255,255,0.15) var(--fill-percent, 0%),
-                        rgba(0,0,0,0.25) var(--fill-percent, 0%)
-                        );
+            background: linear-gradient(to right,
+                    rgba(255, 255, 255, 0.15) var(--fill-percent, 0%),
+                    rgba(0, 0, 0, 0.25) var(--fill-percent, 0%));
             border-radius: 10px;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         input[type="range"]::-moz-range-track {
             height: 12px;
-            background: rgba(0,0,0,0.25);
+            background: rgba(0, 0, 0, 0.25);
             border-radius: 10px;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         input[type="range"]::-moz-range-progress {
             height: 12px;
-            background: rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.15);
             border-radius: 10px;
         }
-        
+
         /* --- Playlist Panel (Right) --- */
         .playlist-panel {
             overflow: hidden;
         }
-        
+
         #playlist-header {
             margin-bottom: 20px;
             display: flex;
@@ -417,13 +455,15 @@
             overflow-y: auto;
             padding: 0 10px;
         }
-        
+
         .playlist::-webkit-scrollbar {
             width: 14px;
         }
+
         .playlist::-webkit-scrollbar-track {
             background: transparent;
         }
+
         .playlist::-webkit-scrollbar-thumb {
             background-color: rgba(255, 255, 255, 0.2);
             border-radius: 10px;
@@ -431,10 +471,11 @@
             background-clip: content-box;
             transition: background-color 0.2s;
         }
+
         .playlist::-webkit-scrollbar-thumb:hover {
             background-color: rgba(255, 255, 255, 0.4);
         }
-        
+
         .playlist-item {
             display: flex;
             align-items: center;
@@ -446,7 +487,7 @@
             transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
             transform: scale(1);
         }
-        
+
         .playlist-item.dragging {
             opacity: 0.5;
             background: var(--highlight-bg);
@@ -457,7 +498,7 @@
             height: 40px;
             flex-shrink: 0;
             border-radius: 6px;
-            background-color: rgba(0,0,0,0.2);
+            background-color: rgba(0, 0, 0, 0.2);
             overflow: hidden;
             display: flex;
             align-items: center;
@@ -481,11 +522,12 @@
             flex-direction: column;
             justify-content: center;
             overflow: hidden;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
             flex-grow: 1;
         }
 
-        .playlist-item-title, .playlist-item-artist {
+        .playlist-item-title,
+        .playlist-item-artist {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -501,8 +543,9 @@
             font-size: 0.8rem;
             color: var(--secondary-text);
         }
-        
-        .playlist-item-drag-handle, .playlist-item-remove-btn {
+
+        .playlist-item-drag-handle,
+        .playlist-item-remove-btn {
             display: none;
             align-items: center;
             color: var(--secondary-text);
@@ -517,7 +560,8 @@
             margin-right: 8px;
         }
 
-        .playlist-item-drag-handle:hover, .playlist-item-remove-btn:hover {
+        .playlist-item-drag-handle:hover,
+        .playlist-item-remove-btn:hover {
             color: var(--primary-text);
         }
 
@@ -525,6 +569,7 @@
             color: #ff8a8a;
             margin-left: auto;
         }
+
         .playlist-item-remove-btn:hover {
             color: #ff4d4d;
         }
@@ -533,9 +578,11 @@
         .playlist.edit-mode .playlist-item-remove-btn {
             display: flex;
         }
+
         .playlist.edit-mode .playlist-item {
             cursor: grab;
         }
+
         .playlist.edit-mode .playlist-item:active {
             cursor: grabbing;
         }
@@ -545,21 +592,21 @@
         }
 
         .playlist-item.active {
-            background: 
+            background:
                 radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.12), transparent 80%),
                 rgba(255, 255, 255, 0.12);
             transform: scale(1.03);
-            box-shadow: 
+            box-shadow:
                 inset 0 1px 1px rgba(255, 255, 255, 0.15),
                 inset 0 -1px 1px rgba(0, 0, 0, 0.1),
-                0 5px 10px rgba(0,0,0,0.2);
+                0 5px 10px rgba(0, 0, 0, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.12);
         }
-        
+
         .playlist-item.active .playlist-item-title {
             font-weight: 700;
         }
-        
+
         #folder-selector {
             display: flex;
             flex-direction: column;
@@ -568,7 +615,7 @@
             height: 100%;
             text-align: center;
         }
-        
+
         #folder-selector h3 {
             font-weight: 500;
             margin-bottom: 8px;
@@ -581,7 +628,7 @@
         #select-folder-btn {
             position: relative;
             overflow: hidden;
-            background: 
+            background:
                 radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.2), transparent 80%),
                 var(--glass-bg);
             backdrop-filter: blur(10px) saturate(150%);
@@ -593,31 +640,31 @@
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 
+            box-shadow:
                 inset 0 1px 2px rgba(255, 255, 255, 0.25),
-                inset 0 -1px 1px rgba(0,0,0,0.15),
-                0 4px 8px rgba(0,0,0,0.3);
+                inset 0 -1px 1px rgba(0, 0, 0, 0.15),
+                0 4px 8px rgba(0, 0, 0, 0.3);
             margin-top: 1rem;
         }
-        
+
         #select-folder-btn:hover {
-             transform: scale(1.05) translateY(-2px);
-             background-color: var(--highlight-bg);
-             box-shadow: 
+            transform: scale(1.05) translateY(-2px);
+            background-color: var(--highlight-bg);
+            box-shadow:
                 inset 0 1px 1px rgba(255, 255, 255, 0.3),
-                inset 0 -1px 1px rgba(0,0,0,0.1),
-                0 8px 15px rgba(0,0,0,0.25);
+                inset 0 -1px 1px rgba(0, 0, 0, 0.1),
+                0 8px 15px rgba(0, 0, 0, 0.25);
         }
 
         #select-folder-btn:active {
             transform: scale(0.98);
-            box-shadow: inset 0 3px 4px rgba(0,0,0,0.25);
+            box-shadow: inset 0 3px 4px rgba(0, 0, 0, 0.25);
         }
 
         #folder-input {
             display: none;
         }
-        
+
         .ripple {
             position: absolute;
             border-radius: 50%;
@@ -635,15 +682,31 @@
         }
 
         @keyframes wobble-effect {
-            0% { transform: scale(0.95); }
-            50% { transform: scale(1.15) translateY(-2px); }
-            100% { transform: scale(1.1) translateY(-2px); }
+            0% {
+                transform: scale(0.95);
+            }
+
+            50% {
+                transform: scale(1.15) translateY(-2px);
+            }
+
+            100% {
+                transform: scale(1.1) translateY(-2px);
+            }
         }
 
         @keyframes play-wobble-effect {
-            0% { transform: scale(1.05); }
-            50% { transform: scale(1.25) translateY(-2px); }
-            100% { transform: scale(1.2) translateY(-2px); }
+            0% {
+                transform: scale(1.05);
+            }
+
+            50% {
+                transform: scale(1.25) translateY(-2px);
+            }
+
+            100% {
+                transform: scale(1.2) translateY(-2px);
+            }
         }
 
         .wobble-animate {
@@ -657,9 +720,12 @@
 
         /* --- Responsive Design --- */
         @media (max-width: 800px) {
-            html, body {
+
+            html,
+            body {
                 overflow-y: auto;
             }
+
             body {
                 padding: 2rem 1rem;
                 align-items: flex-start;
@@ -674,14 +740,15 @@
                 max-height: none;
                 gap: 15px;
             }
+
             .glass-panel {
                 padding: 20px;
             }
-            
+
             #track-info h2 {
                 font-size: 1.25rem;
             }
-            
+
             #track-info p {
                 font-size: 0.9rem;
             }
@@ -694,7 +761,7 @@
                 width: 42px;
                 height: 42px;
             }
-            
+
             #play-pause-btn {
                 width: 50px;
                 height: 50px;
@@ -704,7 +771,7 @@
                 width: 22px;
                 height: 22px;
             }
-            
+
             #play-pause-btn svg {
                 width: 30px;
                 height: 30px;
@@ -714,18 +781,23 @@
                 padding: 0 5px;
             }
         }
-        
+
         /* --- Marquee Animation for long text --- */
         @keyframes marquee {
-            from { transform: translateX(0); }
-            to { transform: translateX(-50%); }
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
         }
-        
+
         #track-info.playing h2.scrolling,
         #track-info.playing p.scrolling,
         .playlist-item.active .playlist-item-title.scrolling,
         .playlist-item.active .playlist-item-artist.scrolling {
-            text-overflow: clip; 
+            text-overflow: clip;
         }
 
         #track-info.playing .scrolling span,
@@ -735,6 +807,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="background-container">
         <div class="blob"></div>
@@ -748,7 +821,12 @@
                 <div class="placeholder-art" id="album-art">
                     <img id="album-art-img" src="" alt="Album Art">
                     <div id="album-art-placeholder">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 18V5l12-2v13" />
+                            <circle cx="6" cy="18" r="3" />
+                            <circle cx="18" cy="16" r="3" />
+                        </svg>
                     </div>
                 </div>
                 <div id="track-info">
@@ -768,27 +846,47 @@
 
                 <div class="playback-controls">
                     <button class="control-btn" id="prev-btn" aria-label="Previous Song">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="currentColor">
+                            <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" />
+                        </svg>
                     </button>
                     <button class="control-btn" id="play-pause-btn" aria-label="Play/Pause">
                         <span id="play-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="currentColor">
+                                <path d="M8 5v14l11-7z" />
+                            </svg>
                         </span>
                         <span id="pause-icon" style="display: none;">
-                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="currentColor">
+                                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                            </svg>
                         </span>
                     </button>
                     <button class="control-btn" id="next-btn" aria-label="Next Song">
-                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18 V6l8.5 6M16 6h2v12h-2z"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="currentColor">
+                            <path d="M6 18 V6l8.5 6M16 6h2v12h-2z" />
+                        </svg>
                     </button>
                 </div>
-                 <div class="volume-container">
+                <div class="volume-container">
                     <button id="volume-btn" aria-label="Mute/Unmute">
                         <span id="volume-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="currentColor">
+                                <path
+                                    d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+                            </svg>
                         </span>
                         <span id="mute-icon" style="display: none;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="currentColor">
+                                <path
+                                    d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
+                            </svg>
                         </span>
                     </button>
                     <input type="range" id="volume-slider" value="80" min="0" max="100">
@@ -798,24 +896,49 @@
 
         <div class="glass-panel playlist-panel">
             <div id="playlist-header">
-                 <h2>Playlist</h2>
-                 <div id="playlist-header-controls">
+                <h2>Playlist</h2>
+                <div id="playlist-header-controls">
                     <button class="control-btn" id="change-folder-btn" title="Select another folder">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path><line x1="12" y1="11" x2="12" y2="17"></line><line x1="9" y1="14" x2="15" y2="14"></line></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z">
+                            </path>
+                            <line x1="12" y1="11" x2="12" y2="17"></line>
+                            <line x1="9" y1="14" x2="15" y2="14"></line>
+                        </svg>
                     </button>
                     <button class="control-btn" id="edit-playlist-btn" title="Reorder Playlist">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="8" y1="6" x2="21" y2="6"></line>
+                            <line x1="8" y1="12" x2="21" y2="12"></line>
+                            <line x1="8" y1="18" x2="21" y2="18"></line>
+                            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                        </svg>
                     </button>
                     <button class="control-btn" id="repeat-btn" aria-label="Repeat">
                         <div class="icon-container">
-                            <svg id="repeat-icon-all" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
-                            <svg id="repeat-icon-one" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4zm-4-2V9h-1l-2 1v1h1.5v2.5H13z"/></svg>
+                            <svg id="repeat-icon-all" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z" />
+                            </svg>
+                            <svg id="repeat-icon-one" style="display: none;" xmlns="http://www.w3.org/2000/svg"
+                                width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4zm-4-2V9h-1l-2 1v1h1.5v2.5H13z" />
+                            </svg>
                         </div>
                     </button>
                     <button class="control-btn" id="shuffle-btn" aria-label="Shuffle">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M10.59 9.17 5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="currentColor">
+                            <path
+                                d="M10.59 9.17 5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z" />
+                        </svg>
                     </button>
-                 </div>
+                </div>
             </div>
 
             <div id="folder-selector">
@@ -824,7 +947,7 @@
                 <button id="select-folder-btn">Select Music Folder</button>
                 <input type="file" id="folder-input" webkitdirectory directory>
             </div>
-            
+
             <ul id="playlist" class="playlist" style="display: none;">
                 <!-- Playlist items will be injected here by JavaScript -->
             </ul>
@@ -839,7 +962,7 @@
             const selectFolderBtn = document.getElementById('select-folder-btn');
             const folderSelectorView = document.getElementById('folder-selector');
             const playlistView = document.getElementById('playlist');
-            
+
             const trackInfo = document.getElementById('track-info');
             const albumArtContainer = document.getElementById('album-art');
             const trackTitle = document.getElementById('track-title');
@@ -993,7 +1116,7 @@
 
                     infoContainer.appendChild(titleEl);
                     infoContainer.appendChild(artistEl);
-                    
+
                     const removeBtn = document.createElement('div');
                     removeBtn.className = 'playlist-item-remove-btn';
                     removeBtn.title = 'Remove from playlist';
@@ -1003,7 +1126,7 @@
                     li.appendChild(artContainer);
                     li.appendChild(infoContainer);
                     li.appendChild(removeBtn);
-                    
+
                     li.addEventListener('click', (e) => {
                         if (isEditingPlaylist) return;
                         currentIndex = index;
@@ -1035,14 +1158,14 @@
                     }
                     return;
                 };
-                
+
                 albumArtContainer.classList.add('fade-out');
                 trackInfo.classList.add('fade-out');
 
                 setTimeout(() => {
                     const track = playlist[index];
                     audio.src = track.url;
-                    
+
                     setupScrollableText(trackTitle, track.title);
                     setupScrollableText(trackArtist, track.artist);
 
@@ -1060,10 +1183,10 @@
                     document.querySelector('.blob:nth-child(1)').style.background = colors[0];
                     document.querySelector('.blob:nth-child(2)').style.background = colors[1];
                     document.querySelector('.blob:nth-child(3)').style.background = colors[2];
-                    
+
                     albumArtContainer.classList.remove('fade-out');
                     trackInfo.classList.remove('fade-out');
-                    
+
                     if (isPlaying) {
                         playTrack();
                     } else {
@@ -1098,13 +1221,13 @@
 
             function playPauseToggle() {
                 if (audio.src) {
-                   audio.paused ? playTrack() : pauseTrack();
+                    audio.paused ? playTrack() : pauseTrack();
                 } else if (playlist.length > 0) {
                     currentIndex = 0;
                     loadTrack(0, true);
                 }
             }
-            
+
             function handleTrackEnd() {
                 if (repeatState === 2) {
                     audio.currentTime = 0;
@@ -1145,12 +1268,12 @@
                 }
                 loadTrack(currentIndex, true);
             }
-            
+
             function toggleShuffle() {
                 isShuffled = !isShuffled;
                 shuffleBtn.classList.toggle('active', isShuffled);
             }
-            
+
             function toggleRepeat() {
                 repeatState = (repeatState + 1) % 3;
                 updateRepeatButton();
@@ -1166,9 +1289,9 @@
 
             function removeTrack(indexToRemove) {
                 const wasPlaying = !audio.paused && currentIndex === indexToRemove;
-                
+
                 playlist.splice(indexToRemove, 1);
-                
+
                 if (playlist.length === 0) {
                     currentIndex = -1;
                     loadTrack(currentIndex);
@@ -1177,7 +1300,7 @@
                         currentIndex--;
                     }
                     if (currentIndex === indexToRemove) {
-                         loadTrack(currentIndex, wasPlaying);
+                        loadTrack(currentIndex, wasPlaying);
                     }
                 }
                 renderPlaylist();
@@ -1185,24 +1308,24 @@
 
             function setupDragAndDrop() {
                 if (!isEditingPlaylist) return;
-                
+
                 let draggedItem = null;
 
                 const handleDragEnd = () => {
                     if (!draggedItem) return;
                     draggedItem.classList.remove('dragging');
-                    
+
                     const currentPlayingUrl = playlist[currentIndex]?.url;
-                    
+
                     const domOrderMap = Array.from(playlistView.children).map(li => {
                         return parseInt(li.dataset.index);
                     });
-                    
+
                     playlist = domOrderMap.map(originalIndex => playlist[originalIndex]);
 
                     currentIndex = playlist.findIndex(track => track.url === currentPlayingUrl);
                     if (currentIndex === -1 && playlist.length > 0) currentIndex = 0;
-                    
+
                     draggedItem = null;
                     renderPlaylist();
                 };
@@ -1237,7 +1360,7 @@
                         e.preventDefault();
                         const y = e.touches[0].clientY;
                         const afterElement = getDragAfterElement(playlistView, y);
-                         if (afterElement == null) {
+                        if (afterElement == null) {
                             playlistView.appendChild(draggedItem);
                         } else {
                             playlistView.insertBefore(draggedItem, afterElement);
@@ -1276,7 +1399,7 @@
                     repeatIconOne.style.display = 'block';
                 }
             }
-            
+
             function updateActiveTrackHighlight() {
                 document.querySelectorAll('.playlist-item').forEach(item => {
                     item.classList.remove('active');
@@ -1310,7 +1433,7 @@
                 audio.currentTime = progressBar.value;
                 updateSliderFill(progressBar);
             });
-            
+
             volumeSlider.addEventListener('input', (e) => {
                 const newVolume = e.target.value / 100;
                 audio.volume = newVolume;
@@ -1367,9 +1490,9 @@
                 analyser.getByteFrequencyData(dataArray);
                 const bassFrequencies = dataArray.slice(0, Math.floor(dataArray.length * 0.2));
                 const averageBass = bassFrequencies.reduce((sum, value) => sum + value, 0) / bassFrequencies.length;
-                
+
                 const saturation = 1.2 + (averageBass / 255) * 0.4;
-                
+
                 backgroundContainer.style.filter = `blur(100px) saturate(${saturation.toFixed(2)})`;
             }
 
@@ -1403,7 +1526,7 @@
                 const hue1 = (hash & 0xFF) % 360;
                 const hue2 = ((hash >> 8) & 0xFF) % 360;
                 const hue3 = ((hash >> 16) & 0xFF) % 360;
-                
+
                 const saturation = 70;
                 const lightness = 50;
 
@@ -1413,7 +1536,7 @@
                     `hsl(${hue3}, ${saturation}%, ${lightness}%)`
                 ];
             }
-            
+
             function createRipple(event) {
                 const button = event.currentTarget;
                 const circle = document.createElement("span");
@@ -1430,7 +1553,7 @@
                 }
                 button.appendChild(circle);
             }
-            
+
             function toggleMute() {
                 if (audio.volume > 0) {
                     preMuteVolume = audio.volume;
@@ -1446,11 +1569,11 @@
                 }
                 updateSliderFill(volumeSlider);
             }
-            
+
             document.addEventListener('keydown', (e) => {
                 if (e.target.tagName === 'INPUT') return;
-                
-                switch(e.code) {
+
+                switch (e.code) {
                     case 'Space':
                         e.preventDefault();
                         playPauseToggle();
@@ -1475,10 +1598,24 @@
                 setupScrollableText(trackTitle, "No song playing");
                 setupScrollableText(trackArtist, "Select a folder to begin");
             }
-            
+
             init();
         });
     </script>
+    
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+    </script>
 </body>
-</html>
 
+</html>
