@@ -300,6 +300,7 @@
                 0 8px 15px rgba(0, 0, 0, 0.3);
         }
 
+
         .control-btn:active {
             transform: scale(0.95);
             box-shadow:
@@ -1249,6 +1250,16 @@
                         pauseTrack();
                     }
 
+                    if ('mediaSession' in navigator) {
+                        const artwork = track.albumArtUrl ? [{ src: track.albumArtUrl, sizes: '512x512', type: 'image/jpeg' }] : [];
+                        navigator.mediaSession.metadata = new MediaMetadata({
+                            title: track.title,
+                            artist: track.artist,
+                            album: 'Musiqua',
+                            artwork: artwork
+                        });
+                    }
+
                 }, 250);
 
                 updateActiveTrackHighlight();
@@ -1266,6 +1277,9 @@
                 playIcon.style.display = 'none';
                 pauseIcon.style.display = 'block';
                 trackInfo.classList.add('playing');
+                if ('mediaSession' in navigator) {
+                    navigator.mediaSession.playbackState = 'playing';
+                }
             }
 
             function pauseTrack() {
@@ -1273,6 +1287,9 @@
                 playIcon.style.display = 'block';
                 pauseIcon.style.display = 'none';
                 trackInfo.classList.remove('playing');
+                if ('mediaSession' in navigator) {
+                    navigator.mediaSession.playbackState = 'paused';
+                }
             }
 
             function playPauseToggle() {
@@ -1731,6 +1748,15 @@
                 }
             });
 
+            function setupMediaSessionHandlers() {
+                if ('mediaSession' in navigator) {
+                    navigator.mediaSession.setActionHandler('play', playPauseToggle);
+                    navigator.mediaSession.setActionHandler('pause', playPauseToggle);
+                    navigator.mediaSession.setActionHandler('previoustrack', prevTrack);
+                    navigator.mediaSession.setActionHandler('nexttrack', nextTrack);
+                }
+            }
+
             function init() {
                 audio.volume = volumeSlider.value / 100;
                 preMuteVolume = audio.volume;
@@ -1738,6 +1764,7 @@
                 updateSliderFill(progressBar);
                 setupScrollableText(trackTitle, "No song playing");
                 setupScrollableText(trackArtist, "Select a folder to begin");
+                setupMediaSessionHandlers();
             }
 
             init();
