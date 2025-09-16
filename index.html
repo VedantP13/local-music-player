@@ -1625,7 +1625,7 @@
 
             function visualize() {
                 requestAnimationFrame(visualize);
-                if (audio.paused || !isAudioContextSetup) {
+                if (document.hidden || audio.paused || !isAudioContextSetup) {
                     if (backgroundContainer.style.filter !== 'blur(100px) saturate(1.2)') {
                         backgroundContainer.style.filter = 'blur(100px) saturate(1.2)';
                     }
@@ -1756,6 +1756,18 @@
                     navigator.mediaSession.setActionHandler('nexttrack', nextTrack);
                 }
             }
+
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    if (audioContext && audioContext.state === 'running') {
+                        audioContext.suspend();
+                    }
+                } else {
+                    if (audioContext && audioContext.state === 'suspended') {
+                        audioContext.resume();
+                    }
+                }
+            });
 
             function init() {
                 audio.volume = volumeSlider.value / 100;
