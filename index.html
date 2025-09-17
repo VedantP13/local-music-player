@@ -4,22 +4,20 @@
 <head>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#121212">
-
+    
     <link rel="icon" href="images/icon-192x192.png" type="image/png">
 
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://vedantp13.github.io/local-music-player/">
-    <meta property="og:title" content="Musiqua - Liquid Glass Music Player">
-    <meta property="og:description"
-        content="A modern, offline-first music player with a stunning liquid glass interface. Load your local music folder and enjoy!">
-    <meta property="og:image" content="https://vedantp13.github.io/local-music-player/images/og-image.png">
+<meta property="og:url" content="https://vedantp13.github.io/local-music-player/">
+<meta property="og:title" content="Musiqua - Liquid Glass Music Player">
+<meta property="og:description" content="A modern, offline-first music player with a stunning liquid glass interface. Load your local music folder and enjoy!">
+<meta property="og:image" content="https://vedantp13.github.io/local-music-player/images/og-image.png">
 
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://vedantp13.github.io/local-music-player/">
-    <meta property="twitter:title" content="Musiqua - Glass Music Player">
-    <meta property="twitter:description"
-        content="A modern, offline-first music player with a stunning liquid glass interface. Load your local music folder and enjoy!">
-    <meta property="twitter:image" content="https://vedantp13.github.io/local-music-player/images/og-image.png">
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://vedantp13.github.io/local-music-player/">
+<meta property="twitter:title" content="Musiqua - Glass Music Player">
+<meta property="twitter:description" content="A modern, offline-first music player with a stunning liquid glass interface. Load your local music folder and enjoy!">
+<meta property="twitter:image" content="https://vedantp13.github.io/local-music-player/images/og-image.png">
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -82,16 +80,16 @@
             height: 100%;
             z-index: -1;
             overflow: hidden;
-            filter: blur(100px) saturate(1.2);
+            filter: blur(100px) saturate(1.1);
             /* Blends the blobs into a soft gradient */
-            transition: filter 0.5s ease-out;
-            /* For beat reaction */
+            transition: filter 0.5s ease-out, opacity 0.75s ease-in-out;
+            /* For beat reaction & hiding for album art */
         }
 
         .blob {
             position: absolute;
             border-radius: 50%;
-            opacity: 0.7;
+            opacity: 0.6;
             transition: background 1.5s ease-in-out;
             /* Smooth color transition for blobs */
         }
@@ -155,14 +153,34 @@
             padding: 30px;
             display: flex;
             flex-direction: column;
+            position: relative;
+            overflow: hidden;
         }
 
         /* --- Player Panel (Left) --- */
         .player-panel {
             text-align: center;
-            overflow: hidden;
-            /* Prevents panel from expanding with long text */
         }
+        
+        /* Album Art Background Effect */
+        .player-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: var(--album-art-bg);
+            background-size: cover;
+            background-position: center;
+            filter: blur(40px) brightness(0.7) saturate(1.2);
+            transform: scale(1.1); /* Ensure blur doesn't create hard edges */
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.75s ease-in-out;
+        }
+
+        .player-panel.has-art::before {
+            opacity: 1;
+        }
+
 
         #album-art {
             transition: opacity 0.4s ease-in-out;
@@ -178,6 +196,7 @@
             overflow: hidden;
             /* Prevents long titles from expanding the container */
             transition: opacity 0.4s ease-in-out;
+            z-index: 1;
         }
 
         #track-info.fade-out,
@@ -213,6 +232,7 @@
             justify-content: center;
             margin-bottom: 20px;
             overflow: hidden;
+            z-index: 1;
         }
 
         #album-art-img {
@@ -231,6 +251,7 @@
         /* --- Controls & Sliders --- */
         .controls-wrapper {
             margin-top: auto;
+            z-index: 1;
             /* This pushes the controls to the bottom respecting padding */
         }
 
@@ -300,7 +321,6 @@
                 0 8px 15px rgba(0, 0, 0, 0.3);
         }
 
-
         .control-btn:active {
             transform: scale(0.95);
             box-shadow:
@@ -326,7 +346,7 @@
         #play-pause-btn:hover {
             background-color: var(--highlight-bg);
         }
-
+        
         .control-btn svg {
             width: 24px;
             height: 24px;
@@ -344,7 +364,7 @@
             gap: 8px;
             color: var(--primary-text);
         }
-
+        
         #volume-btn {
             position: relative;
             top: 2px;
@@ -682,7 +702,7 @@
             transform: scale(0.98);
             box-shadow: inset 0 3px 4px rgba(0, 0, 0, 0.25);
         }
-
+        
         @keyframes highlight-folder-btn {
             0% {
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -801,33 +821,119 @@
             }
 
             .control-btn {
-                width: 48px;
-                height: 48px;
+                width: 42px;
+                height: 42px;
             }
 
             #play-pause-btn {
-                width: 60px;
-                height: 60px;
+                width: 50px;
+                height: 50px;
             }
 
             .control-btn svg {
-                width: 26px;
-                height: 26px;
+                width: 22px;
+                height: 22px;
             }
 
             #play-pause-btn svg {
-                width: 36px;
-                height: 36px;
-            }
-
-            input[type="range"]::-webkit-slider-thumb {
-                width: 24px;
-                height: 24px;
-                margin-top: -6px;
+                width: 30px;
+                height: 30px;
             }
 
             .playlist {
                 padding: 0 5px;
+            }
+        }
+        
+        /* --- Fullscreen Desktop Design --- */
+        @media (min-width: 1200px) {
+            body {
+                padding: 0;
+                overflow: hidden;
+            }
+            
+            .music-player {
+                grid-template-columns: 1fr 400px;
+                width: 100vw;
+                height: 100vh;
+                max-width: none;
+                max-height: none;
+                border-radius: 0;
+                gap: 0;
+            }
+            
+            .glass-panel {
+                border-radius: 0;
+                border: none;
+                box-shadow: none;
+                padding: 3rem 2.5rem;
+                height: 100%;
+            }
+            
+            .player-panel {
+                border-right: 1px solid var(--glass-border);
+            }
+            
+            .playlist-panel {
+                border-right: none;
+                display: flex;
+                flex-direction: column;
+                padding: 3rem 1.5rem; /* Symmetrical horizontal padding */
+            }
+            
+            .player-panel>div:first-child {
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                min-height: 0;
+            }
+            
+            .controls-wrapper {
+                margin-top: 2rem;
+                padding-bottom: 0;
+                max-width: 500px;
+                width: 100%;
+                margin-left: auto;
+                margin-right: auto;
+                flex-shrink: 0;
+            }
+            
+            .placeholder-art {
+                width: 100%;
+                max-width: 400px;
+                aspect-ratio: 1 / 1;
+                margin-left: auto;
+                margin-right: auto;
+                margin-bottom: 2.5rem;
+            }
+            
+            #track-info h2 {
+                font-size: 2rem;
+            }
+            
+            #track-info p {
+                font-size: 1.2rem;
+            }
+
+            #playlist-header {
+                 margin-bottom: 30px;
+            }
+
+            #folder-selector {
+                flex-grow: 1;
+            }
+
+            #playlist-header-controls {
+                gap: 12px;
+            }
+            
+            .playlist {
+                padding: 0 1rem; /* Add padding for scrollbar and balance */
+                flex-grow: 1;
+                min-height: 0;
             }
         }
 
@@ -915,9 +1021,8 @@
                         </span>
                     </button>
                     <button class="control-btn" id="next-btn" aria-label="Next Song">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="currentColor">
-                            <path d="M6 18 V6l8.5 6M16 6h2v12h-2z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M16 6h2v12h-2zM6 18V6l8.5 6z" />
                         </svg>
                     </button>
                 </div>
@@ -1011,6 +1116,9 @@
             const selectFolderBtn = document.getElementById('select-folder-btn');
             const folderSelectorView = document.getElementById('folder-selector');
             const playlistView = document.getElementById('playlist');
+            const playerPanel = document.querySelector('.player-panel');
+            const blobContainer = document.querySelector('.background-container');
+
 
             const trackInfo = document.getElementById('track-info');
             const albumArtContainer = document.getElementById('album-art');
@@ -1038,7 +1146,6 @@
             const volumeBtn = document.getElementById('volume-btn');
             const volumeIcon = document.getElementById('volume-icon');
             const muteIcon = document.getElementById('mute-icon');
-            const backgroundContainer = document.querySelector('.background-container');
 
             // --- State Management ---
             let playlist = [];
@@ -1230,10 +1337,15 @@
                         albumArtImg.src = track.albumArtUrl;
                         albumArtImg.style.display = 'block';
                         albumArtPlaceholder.style.display = 'none';
+                        playerPanel.style.setProperty('--album-art-bg', `url(${track.albumArtUrl})`);
+                        playerPanel.classList.add('has-art');
+                        blobContainer.style.opacity = '0';
                     } else {
                         albumArtImg.src = '';
                         albumArtImg.style.display = 'none';
                         albumArtPlaceholder.style.display = 'flex';
+                        playerPanel.classList.remove('has-art');
+                        blobContainer.style.opacity = '1';
                     }
 
                     const colors = generateColorsFromText(track.title);
@@ -1249,7 +1361,7 @@
                     } else {
                         pauseTrack();
                     }
-
+                    
                     if ('mediaSession' in navigator) {
                         const artwork = track.albumArtUrl ? [{ src: track.albumArtUrl, sizes: '512x512', type: 'image/jpeg' }] : [];
                         navigator.mediaSession.metadata = new MediaMetadata({
@@ -1409,7 +1521,7 @@
                     if (!draggedItem) return;
                     draggedItem.classList.remove('dragging');
 
-                    const currentPlayingUrl = playlist[currentIndex]?.url;
+                    const currentPlayingUrl = playlist[currentIndex] ?.url;
 
                     const domOrderMap = Array.from(playlistView.children).map(li => {
                         return parseInt(li.dataset.index);
@@ -1506,13 +1618,13 @@
                     }
                 }
             }
-
+            
             function promptToSelectFolder() {
                 // For mobile view, scroll to the button
                 if (window.matchMedia("(max-width: 800px)").matches) {
                     folderSelectorView.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
-
+                
                 // Animate the button to draw attention
                 selectFolderBtn.classList.add('highlight');
                 selectFolderBtn.addEventListener('animationend', () => {
@@ -1600,7 +1712,7 @@
                 const handleInteractionEnd = () => button.classList.add('wobble-animate');
                 button.addEventListener('mouseup', handleInteractionEnd);
                 button.addEventListener('touchend', handleInteractionEnd);
-
+                
                 button.addEventListener('animationend', (e) => {
                     if (e.animationName === 'wobble-effect' || e.animationName === 'play-wobble-effect') {
                         button.classList.remove('wobble-animate');
@@ -1671,8 +1783,8 @@
                 const hue2 = ((hash >> 8) & 0xFF) % 360;
                 const hue3 = ((hash >> 16) & 0xFF) % 360;
 
-                const saturation = 70;
-                const lightness = 50;
+                const saturation = 60; // Reduced from 70
+                const lightness = 55; // Increased from 50
 
                 return [
                     `hsl(${hue1}, ${saturation}%, ${lightness}%)`,
@@ -1687,7 +1799,7 @@
                 const diameter = Math.max(button.clientWidth, button.clientHeight);
                 const radius = diameter / 2;
                 const rect = button.getBoundingClientRect();
-
+                
                 let clientX = event.clientX;
                 let clientY = event.clientY;
                 if (event.touches && event.touches.length > 0) {
@@ -1730,7 +1842,7 @@
                     promptToSelectFolder();
                     return;
                 }
-
+                
                 switch (e.code) {
                     case 'Space':
                         e.preventDefault();
@@ -1747,7 +1859,7 @@
                         break;
                 }
             });
-
+            
             function setupMediaSessionHandlers() {
                 if ('mediaSession' in navigator) {
                     navigator.mediaSession.setActionHandler('play', playPauseToggle);
@@ -1799,3 +1911,5 @@
 </body>
 
 </html>
+
+
